@@ -1,0 +1,65 @@
+import os
+from cryptography.fernet import Fernet
+import bcrypt
+from PIL import Image, ImageDraw, ImageFont
+
+# Step 1: Simulate User Database with Hashed Passwords
+users = {}
+
+def create_user(username, password):
+    salt = bcrypt.gensalt()
+    hashed_pw = bcrypt.hashpw(password.encode(), salt)
+    users[username] = hashed_pw
+
+def authenticate_user(username, password):
+    if username in users and bcrypt.checkpw(password.encode(), users[username]):
+        return True
+    return False
+
+# Step 2: File Encryption System using Fernet (AES)
+key = Fernet.generate_key()
+cipher_suite = Fernet(key)
+
+def encrypt_file(file_data):
+    return cipher_suite.encrypt(file_data.encode())
+
+def decrypt_file(encrypted_data):
+    return cipher_suite.decrypt(encrypted_data).decode()
+
+# Simulate the whole process
+username = "rahul123"
+password = "securepass"
+
+# Create a new user
+create_user(username, password)
+auth_result = authenticate_user(username, password)
+
+# Simulate file encryption and decryption
+original_file_content = "Confidential Project Report Contents"
+encrypted_content = encrypt_file(original_file_content)
+decrypted_content = decrypt_file(encrypted_content)
+
+# Create a screenshot of the output process
+output_text = f"""
+User Created: {username}
+Authentication Success: {auth_result}
+
+Original File Content:
+{original_file_content}
+
+Encrypted Content:
+{encrypted_content.decode()[:50]}...
+
+Decrypted Content:
+{decrypted_content}
+"""
+
+# Create image from text output
+img = Image.new('RGB', (800, 400), color=(255, 255, 255))
+draw = ImageDraw.Draw(img)
+font = ImageFont.load_default()
+draw.multiline_text((10, 10), output_text, fill=(0, 0, 0), font=font)
+image_path = "/mnt/data/Secure_File_Sharing_Output.png"
+img.save(image_path)
+
+image_path
