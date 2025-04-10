@@ -1,0 +1,38 @@
+import os
+from PIL import Image, ImageDraw, ImageFont
+
+# Simulate terminal interface for the secure file sharing system
+interface_output = """
+Welcome to Secure File Sharing System
+
+1. Sign Up
+Username: rahul123
+Password: ********
+[INFO] User 'rahul123' created successfully.
+
+2. Login
+Username: rahul123
+Password: ********
+[INFO] Authentication successful. Welcome rahul123!
+
+3. File Upload
+[INFO] Original Content: Confidential Project Report Contents
+[INFO] Encrypted Content: gAAAAABl...
+[INFO] File uploaded securely.
+
+4. File Download
+[INFO] Decrypted Content: Confidential Project Report Contents
+
+Thank you for using Secure File Sharing System!
+"""
+
+# Create image from simulated terminal interface
+img = Image.new('RGB', (800, 500), color=(245, 245, 245))
+draw = ImageDraw.Draw(img)
+font = ImageFont.load_default()
+draw.multiline_text((10, 10), interface_output, fill=(0, 0, 0), font=font)
+
+interface_image_path = "/mnt/data/Secure_File_Sharing_Interface_Output.png"
+img.save(interface_image_path)
+
+interface_image_path
